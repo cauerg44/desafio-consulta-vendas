@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.devsuperior.dsmeta.dto.SaleReportDTO;
+import com.devsuperior.dsmeta.dto.SaleSummaryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,5 +39,17 @@ public class SaleService {
 		}
 
 		return repository.searchSaleReport(LocalDate.parse(minDate), LocalDate.parse(maxDate), name, pageable);
+	}
+
+	public List<SaleSummaryDTO> searchSummaries(String minDate, String maxDate) {
+		if(maxDate.isBlank()){
+			maxDate = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault()).toString();
+		}
+
+		if(minDate.isBlank()){
+			minDate = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault()).minusYears(1L).toString();
+		}
+
+		return repository.summary(LocalDate.parse(minDate), LocalDate.parse(maxDate));
 	}
 }
